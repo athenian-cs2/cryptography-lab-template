@@ -1,62 +1,91 @@
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.File;
-import java.io.FileInputStream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MyTests {
 
-    // Works the same as assertEquals for strings, except multiple correct answers can be provided
-    // The aim is to have a helpful error message be printed out when the assertion fails
-    public static void assertMultipleEquals(String[] expected, String actual, String message) {
-        for (String str: expected) {
-            if (str.equals(actual)) {
-                assertEquals(str, actual, message);
-                return;
-            }
-        }
+    
+    @Test
+    public void testEncryptCaesar() {
+        // Uppercase, basic
+        assertEquals("KHOOR", Caesar.encryptCaesar("HELLO"), "The encrypted output of \"HELLO\" should be: " + "KHOOR");
+        assertEquals("KHOOR ZRUOG", Caesar.encryptCaesar("HELLO WORLD"), "The encrypted output of \"HELLO WORLD\" should be: " + "KHOOR ZRUOG");
+        assertEquals("KHOOR, ZRUOG!", Caesar.encryptCaesar("HELLO, WORLD!"), "The encrypted output of \"HELLO, WORLD!\" should be: " + "KHOOR, ZRUOG!");
 
-        // Currently, it will print out the first expected answer as the "correct" answer
-        // However, the message should illuminate what the correct possibilites are
-        assertEquals(expected[0], actual, message);
-    }
+        // Lowercase, basic
+        assertEquals("khoor", Caesar.encryptCaesar("hello"), "The encrypted output of \"hello\" should be: " + "khoor");
+        assertEquals("khoor zruog", Caesar.encryptCaesar("hello world"), "The encrypted output of \"hello world\" should be: " + "khoor zruog");
+        assertEquals("khoor, zruog!", Caesar.encryptCaesar("hello, world!"), "The encrypted output of \"hello, world!\" should be: " + "khoor, zruog!");
 
-    // Works the same as assertTrue, however, actually calls assertEquals when the condition is false,
-    // so that that the error message is more helpful
-    public static void assertTrueString(boolean condition, String expected, String actual, String message) {
-        if (condition) {
-            assertTrue(condition, message);
-        }
-        else {
-            assertEquals(expected, actual, message);
-        }
+        // XYZ
+        assertEquals("cheud a-udbv", Caesar.encryptCaesar("zebra x-rays"), "The encrypted output of \"zebra x-rays\" should be: " + "cheud a-udbv");
+        assertEquals("FRQWHAWXDOLCH BDNV", Caesar.encryptCaesar("CONTEXTUALIZE YAKS"), "The encrypted output of \"CONTEXTUALIZE YAKS\" should be: " + "FRQWHAWXDOLCH BDNV");
+        assertEquals("defghijklmnopqrstuvwxyzabc", Caesar.encryptCaesar("abcdefghijklmnopqrstuvwxyz"), "The encrypted output of \"abcdefghijklmnopqrstuvwxyz\" should be: " + "defghijklmnopqrstuvwxyzabc");
+        assertEquals("DEFGHIJKLMNOPQRSTUVWXYZABC", Caesar.encryptCaesar("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "The encrypted output of \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\" should be: " + "DEFGHIJKLMNOPQRSTUVWXYZABC");
+        assertEquals("deFGhIJklmNOPQRstuVWxyZAbC", Caesar.encryptCaesar("abCDeFGhijKLMNOpqrSTuvWXyZ"), "The encrypted output of \"abCDeFGhijKLMNOpqrSTuvWXyZ\" should be: " + "deFGhIJklmNOPQRstuVWxyZAbC");
     }
 
     @Test
-    public void testAsksForName() throws IOException {
-        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-            PrintStream originalOut = System.out;
-            System.setOut(new PrintStream(bos));
+    public void testDecryptCaesar() {
+        // Uppercase, basic
+        assertEquals("HELLO", Caesar.decryptCaesar("KHOOR"), "The decrypted output of \"KHOOR\" should be: " + "HELLO");
+        assertEquals("HELLO WORLD", Caesar.decryptCaesar("KHOOR ZRUOG"), "The decrypted output of \"KHOOR ZRUOG\" should be: " + "HELLO WORLD");
+        assertEquals("HELLO, WORLD!", Caesar.decryptCaesar("KHOOR, ZRUOG!"), "The decrypted output of \"KHOOR, ZRUOG!\" should be: " + "HELLO, WORLD!");
 
-            FileInputStream is = new FileInputStream(new File("src/test/java/Names.txt"));
-            System.setIn(is);
+        // Lowercase, basic
+        assertEquals("hello", Caesar.decryptCaesar("khoor"), "The decrypted output of \"khoor\" should be: " + "hello");
+        assertEquals("hello world", Caesar.decryptCaesar("khoor zruog"), "The decrypted output of \"khoor zruog\" should be: " + "hello world");
+        assertEquals("hello, world!", Caesar.decryptCaesar("khoor, zruog!"), "The decrypted output of \"khoor, zruog!\" should be: " + "hello, world!");
 
-            
+        // XYZ
+        assertEquals("zebra x-rays", Caesar.decryptCaesar("cheud a-udbv"), "The decrypted output of \"cheud a-udbv\" should be: " + "zebra x-rays");
+        assertEquals("CONTEXTUALIZE YAKS", Caesar.decryptCaesar("FRQWHAWXDOLCH BDNV"), "The decrypted output of \"FRQWHAWXDOLCH BDNV\" should be: " + "CONTEXTUALIZE YAKS");
+        assertEquals("abcdefghijklmnopqrstuvwxyz", Caesar.decryptCaesar("defghijklmnopqrstuvwxyzabc"), "The decrypted output of \"defghijklmnopqrstuvwxyzabc\" should be: " + "abcdefghijklmnopqrstuvwxyz");
+        assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ", Caesar.decryptCaesar("DEFGHIJKLMNOPQRSTUVWXYZABC"), "The decrypted output of \"DEFGHIJKLMNOPQRSTUVWXYZABC\" should be: " + "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        assertEquals("abCDeFGhijKLMNOpqrSTuvWXyZ", Caesar.decryptCaesar("deFGhIJklmNOPQRstuVWxyZAbC"), "The decrypted output of \"deFGhIJklmNOPQRstuVWxyZAbC\" should be: " + "abCDeFGhijKLMNOpqrSTuvWXyZ");
+    }
 
-            
-            // Call main()
-            MyMain.main(null);
+    @Test
+    public void testEncryptCaesarKey() {
+        // Uppercase, basic
+        assertEquals("KHOOR, ZRUOG!", Caesar.encryptCaesarKey("HELLO, WORLD!", 3), "The encrypted output of \"HELLO, WORLD!\" with the key " + "3" + " should be: " + "KHOOR, ZRUOG!");
+        assertEquals("KHOOR, ZRUOG!", Caesar.encryptCaesarKey("HELLO, WORLD!", 133), "The encrypted output of \"HELLO, WORLD!\" with the key " + "133" + " should be: " + "KHOOR, ZRUOG!");
+        assertEquals("LIPPS, ASVPH!", Caesar.encryptCaesarKey("HELLO, WORLD!", 4), "The encrypted output of \"HELLO, WORLD!\" with the key " + "4" + " should be: " + "LIPPS, ASVPH!");
+        assertEquals("MJQQT, BTWQI!", Caesar.encryptCaesarKey("HELLO, WORLD!", 5), "The encrypted output of \"HELLO, WORLD!\" with the key " + "5" + " should be: " + "MJQQT, BTWQI!");
+    }
 
-            // Test 1: User should be prompted for their name (may want to remove this test case)
-            String output = bos.toString().trim();
-            assertTrueString(output.contains("What is your name?"), "What is your name? ...", output.substring(0, 18), "The first 18 characters of your output should be: \"What is your name?\"");
+    @Test
+    public void testDecryptCaesarKey() {
+        // Uppercase, basic
+        assertEquals("HELLO, WORLD!", Caesar.decryptCaesarKey("KHOOR, ZRUOG!", 3), "The decrypted output of \"KHOOR, ZRUOG!\" with the key " + "3" + " should be: " + "HELLO, WORLD!");
+        assertEquals("HELLO, WORLD!", Caesar.decryptCaesarKey("KHOOR, ZRUOG!", 133), "The decrypted output of \"KHOOR, ZRUOG!\" with the key " + "133" + " should be: " + "HELLO, WORLD!");
+        assertEquals("HELLO, WORLD!", Caesar.decryptCaesarKey("LIPPS, ASVPH!", 4), "The decrypted output of \"LIPPS, ASVPH!\" with the key " + "4" + " should be: " + "HELLO, WORLD!");
+        assertEquals("HELLO, WORLD!", Caesar.decryptCaesarKey("MJQQT, BTWQI!", 5), "The decrypted output of \"MJQQT, BTWQI!\" with the key " + "5" + " should be: " + "HELLO, WORLD!");
+    }
 
-            System.setOut(originalOut);
-        }
+    @Test
+    public void testEncryptVigenere() {
+        // Basic tests
+        assertEquals("HFNOS", Vigenere.encryptVigenere("HELLO", "ABCDE"), "The encrypted output of \"HELLO\" with the key \"ABCDE\" should be: " + "HFNOS");
+        assertEquals("HFNOS WPTOH", Vigenere.encryptVigenere("HELLO WORLD", "ABCDE"), "The encrypted output of \"HELLO WORLD\" with the key \"ABCDE\" should be: " + "HFNOS WPTOH");      
+        assertEquals("HFNOS, WPTOH!", Vigenere.encryptVigenere("HELLO, WORLD!", "ABCDE"), "The encrypted output of \"HELLO, WORLD!\" with the key \"ABCDE\" should be: " + "HFNOS, WPTOH!");    
+        
+        // Harder tests
+        assertEquals("B qlsdk wyy jlwqs fffr krf lrjz dfq", Vigenere.encryptVigenere("A quick fox jumps over the lazy dog", "BARK"), "The encrypted output of \"A quick fox jumps over the lazy dog\" with the key \"BARK\" should be: " + "B qlsdk wyy jlwqs fffr krf lrjz dfq");
+        assertEquals("Wenv af fzi kpxs qwci oznlr wtebsc uinw", Vigenere.encryptVigenere("Pack my box with five dozen liquor jugs", "HELLO"), "The encrypted output of \"Pack my box with five dozen liquor jugs\" with the key \"HELLO\" should be: " + "Wenv af fzi kpxs qwci oznlr wtebsc uinw");      
+        assertEquals("Hfe uskinxtx ehicb lztg zeszzg wumg!", Vigenere.encryptVigenere("How vexingly quick daft zebras jump!", "ARIZONA"), "The encrypted output of \"How vexingly quick daft zebras jump!\" with the key \"ARIZONA\" should be: " + "Hfe uskinxtx ehicb lztg zeszzg wumg!");    
+    }
+
+    @Test
+    public void testDecryptVigenere() {
+        // Basic tests
+        assertEquals("HELLO", Vigenere.decryptVigenere("HFNOS", "ABCDE"), "The decrypted output of \"HFNOS\" with the key \"ABCDE\" should be: " + "HELLO");
+        assertEquals("HELLO WORLD", Vigenere.decryptVigenere("HFNOS WPTOH", "ABCDE"), "The decrypted output of \"HFNOS WPTOH\" with the key \"ABCDE\" should be: " + "HELLO WORLD");
+        assertEquals("HELLO, WORLD!", Vigenere.decryptVigenere("HFNOS, WPTOH!", "ABCDE"), "The decrypted output of \"HFNOS, WPTOH!\" with the key \"ABCDE\" should be: " + "HELLO, WORLD!");
+
+        // Harder tests
+        assertEquals("A quick fox jumps over the lazy dog", Vigenere.decryptVigenere("B qlsdk wyy jlwqs fffr krf lrjz dfq", "BARK"), "The decrypted output of \"B qlsdk wyy jlwqs fffr krf lrjz dfq\" with the key \"BARK\" should be: " + "A quick fox jumps over the lazy dog");
+        assertEquals("Pack my box with five dozen liquor jugs", Vigenere.decryptVigenere("Wenv af fzi kpxs qwci oznlr wtebsc uinw", "HELLO"), "The decrypted output of \"Wenv af fzi kpxs qwci oznlr wtebsc uinw\" with the key \"HELLO\" should be: " + "Pack my box with five dozen liquor jugs");
+        assertEquals("How vexingly quick daft zebras jump!", Vigenere.decryptVigenere("Hfe uskinxtx ehicb lztg zeszzg wumg!", "ARIZONA"), "The decrypted output of \"Hfe uskinxtx ehicb lztg zeszzg wumg!\" with the key \"ARIZONA\" should be: " + "How vexingly quick daft zebras jump!");
     }
 }
