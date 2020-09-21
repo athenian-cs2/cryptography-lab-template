@@ -41,7 +41,7 @@ public class Caesar {
             System.out.println(decryptCaesar(message));
         }
         else {
-            System.out.println("Unknown message; please type either \"encrypt\" or \"decrypt\"");
+            System.out.println("Unknown command; please type either \"encrypt\" or \"decrypt\"");
         }
 
         scan.close();

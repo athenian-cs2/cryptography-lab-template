@@ -35,7 +35,7 @@ public class Vigenere {
             System.out.println(decryptVigenere(message, key));
         }
         else {
-            System.out.println("Unknown message; please type either \"encrypt\" or \"decrypt\"");
+            System.out.println("Unknown command; please type either \"encrypt\" or \"decrypt\"");
         }
 
         scan.close();
