@@ -12,10 +12,10 @@ test:
 tests: test
 
 caesartest: 
-	./gradlew clean test --tests MyTests.testEncryptCaesar --tests MyTests.testDecryptCaesar
+	./gradlew clean test --tests CaesarTest
 
 caesarkeytest:
-	./gradlew clean test --tests MyTests.testEncryptCaesarKey --tests MyTests.testDecryptCaesarKey
+	./gradlew clean test --tests CaesarKeyTest
 
 vigeneretest:
-	./gradlew clean test --tests MyTests.testEncryptVigenere --tests MyTests.testDecryptVigenere
+	./gradlew clean test --tests VigenereTest
